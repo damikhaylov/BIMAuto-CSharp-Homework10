@@ -27,11 +27,13 @@ namespace Task1
             {
                 Angle angle = new Angle();
 
-                Console.Write("Введите значение градусов: ");
-                angle.Deg = Convert.ToInt32(Console.ReadLine());                
-                Console.Write("Введите значение минут: ");
+                //Проверки введёных значений осуществляются внутри класса Angle, вызывая исключения
+
+                Console.Write("Введите значение градусов (0...359): ");
+                angle.Deg = Convert.ToInt32(Console.ReadLine());
+                Console.Write("Введите значение минут (0...59): ");
                 angle.Min = Convert.ToInt32(Console.ReadLine());
-                Console.Write("Введите значение секунд: ");
+                Console.Write("Введите значение секунд (0...59): ");
                 angle.Sec = Convert.ToInt32(Console.ReadLine());
 
                 Console.WriteLine("\nВведено значение: {0}", angle.ToString());
@@ -47,6 +49,7 @@ namespace Task1
     }
     class Angle
     {
+        int degrees;
         int minutes;
         int seconds;
 
@@ -59,15 +62,7 @@ namespace Task1
 
         public double GetDecimalDegrees()
         {
-            if (this.Deg >= 0)
-            {
-                return (double)this.Deg + ((double)this.Min) / 60 + ((double)this.Sec) / 3600;
-            }
-            else
-            {
-                return (double)this.Deg - ((double)this.Min) / 60 - ((double)this.Sec) / 3600;
-            }
-            
+            return (double)this.Deg + ((double)this.Min) / 60 + ((double)this.Sec) / 3600;
         }
 
         public double ToRadians()
@@ -80,8 +75,25 @@ namespace Task1
             return String.Format("{0}° {1}' {2}''", this.Deg, this.Min, this.Sec);
         }
 
-        public int Deg { set; get; }
-        
+        public int Deg
+        {
+            set
+            {
+                if (value >= 0 && value < 360)
+                {
+                    degrees = value;
+                }
+                else
+                {
+                    throw new Exception("Задано недопустимое значение градусов.");
+                }
+            }
+            get
+            {
+                return degrees;
+            }
+        }
+
         public int Min
         {
             set
@@ -91,7 +103,7 @@ namespace Task1
                     minutes = value;
                 }
                 else
-                { 
+                {
                     throw new Exception("Задано недопустимое значение угловых минут.");
                 }
             }
@@ -100,7 +112,7 @@ namespace Task1
                 return minutes;
             }
         }
-        
+
         public int Sec
         {
             set
